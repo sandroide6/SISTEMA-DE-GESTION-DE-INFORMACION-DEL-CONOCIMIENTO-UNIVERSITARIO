@@ -154,6 +154,5 @@ INSERT INTO enfoque_rc (nombre, descripcion) VALUES
 ('Enfoque por Proyectos', 'Aprendizaje basado en proyectos'),
 ('Enfoque por Investigación', 'Método científico aplicado');
 
-PRINT 'Tablas CORREGIDAS del módulo de Innovación Curricular creadas exitosamente!';
-PRINT '8 tablas sin claves foráneas implementadas.';
+
 GO
