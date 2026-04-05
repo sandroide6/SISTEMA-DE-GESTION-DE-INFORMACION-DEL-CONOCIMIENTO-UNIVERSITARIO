@@ -1,3 +1,4 @@
+
 // Program.cs - Punto de entrada de la API Genérica
 // Configuración de servicios, inyección de dependencias y middleware
 
@@ -19,8 +20,15 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ApiGenericaCsharp.Modelos; // donde está ConfiguracionJwt
 
-// Crea el "builder": punto de inicio para configurar servicios y la aplicación.
+using Microsoft.EntityFrameworkCore;
+using ApiGenericaCsharp.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 // ---------------------------------------------------------
 // CONFIGURACIÓN (OCP: se puede extender sin tocar la lógica)
@@ -52,6 +60,7 @@ builder.Services.AddCors(opts =>
         .AllowAnyHeader()
     );
 });
+
 
 // Agrega caché en memoria y sesión HTTP ligera (opcional).
 builder.Services.AddDistributedMemoryCache();
@@ -207,6 +216,7 @@ var configuracionJwt = new ConfiguracionJwt();
 builder.Configuration.GetSection("Jwt").Bind(configuracionJwt);
 
 // Registra el servicio de autenticación basado en JWT Bearer.
+/*
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opciones =>
     {
@@ -223,10 +233,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(configuracionJwt.Key) // Clave secreta.
             )
         };
-    });
+    }); */
 
 // Construye la aplicación con todo lo configurado arriba.
 var app = builder.Build();
+
+app.UseCors("AllowAll");
 
 // ---------------------------------------------------------
 // MIDDLEWARE (orden importa: se ejecuta de arriba hacia abajo)
@@ -263,14 +275,13 @@ app.UseCors("PermitirTodo");
 app.UseSession();
 
 // Activa la autenticación JWT antes de aplicar la autorización.
-app.UseAuthentication();
+//app.UseAuthentication();
 
 // Agrega el middleware de autorización.
-app.UseAuthorization();
+//app.UseAuthorization();
 
 // Mapea las rutas de los controladores.
 app.MapControllers();
 
 // Arranca la aplicación y queda escuchando solicitudes HTTP.
 app.Run();
-
