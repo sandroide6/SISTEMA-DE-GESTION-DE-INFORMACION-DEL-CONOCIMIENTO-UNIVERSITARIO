@@ -1,0 +1,208 @@
+@page "/dashboard/aliado"
+@rendermode InteractiveServer
+@inject FrontBlazor_AppiGenericaCsharp.Services.ApiService Api
+
+<PageTitle>Aliados</PageTitle>
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h3><i class="bi bi-handshake me-2"></i>Gestión de Aliados</h3>
+        </div>
+        <div class="col-md-4 text-end">
+            @if (!mostrarFormulario)
+            {
+                <button class="btn btn-primary" @onclick="NuevoRegistro">
+                    <i class="bi bi-plus-circle"></i> Nuevo
+                </button>
+            }
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        <div class="alert @(exito ? "alert-success" : "alert-danger") alert-dismissible fade show">
+            @mensaje
+            <button type="button" class="btn-close" @onclick="() => mensaje = string.Empty"></button>
+        </div>
+    }
+
+    @if (mostrarFormulario)
+    {
+        <div class="card mb-4 border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@(editando ? "Editar Aliado" : "Nuevo Aliado")</h5>
+            </div>
+            <div class="card-body">
+                <form @onsubmit="GuardarRegistro">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">NIT <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" @bind="campoNit" placeholder="Ej: 123456789" required disabled="@editando" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Razón Social <span class="text-danger">*</span></label>
+                            <input class="form-control" @bind="campoRazonSocial" placeholder="Nombre empresa" required />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nombre Contacto</label>
+                            <input class="form-control" @bind="campoNombreContacto" placeholder="Representante" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Correo</label>
+                            <input type="email" class="form-control" @bind="campoCorreo" placeholder="contacto@empresa.com" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" @bind="campoTelefono" placeholder="3001234567" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ciudad</label>
+                            <input class="form-control" @bind="campoCiudad" placeholder="Bogotá" />
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success" disabled="@cargando">
+                            @if (cargando) { <span class="spinner-border spinner-border-sm me-2"></span> }
+                            Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Buscar</label>
+                    <input type="text" class="form-control" @bind="busqueda" @bind:event="oninput" placeholder="Nombre o NIT..." />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Límite</label>
+                    <input type="number" class="form-control" @bind="limite" min="5" max="100" />
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-outline-primary w-100" @onclick="CargarRegistros">
+                        <i class="bi bi-arrow-clockwise"></i> Cargar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (cargando)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary"></div>
+        </div>
+    }
+
+    @if (!cargando && registros.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>NIT</th>
+                        <th>Razón Social</th>
+                        <th>Contacto</th>
+                        <th>Correo</th>
+                        <th>Teléfono</th>
+                        <th>Ciudad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reg in registros)
+                    {
+                        <tr>
+                            <td class="fw-bold">@reg["nit"]</td>
+                            <td>@reg["razon_social"]</td>
+                            <td><small>@(reg["nombre_contacto"] ?? "—")</small></td>
+                            <td><small>@(reg["correo"] ?? "—")</small></td>
+                            <td><small>@(reg["telefono"] ?? "—")</small></td>
+                            <td><small>@(reg["ciudad"] ?? "—")</small></td>
+                            <td>
+                                <button class="btn btn-warning btn-sm me-2" @onclick="() => EditarRegistro(reg)"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-danger btn-sm" @onclick="() => ConfirmarEliminar(reg)"><i class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @if (!cargando && !registros.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <i class="bi bi-inbox"></i> No hay aliados. @if (!mostrarFormulario) { <a href="#" @onclick="NuevoRegistro">Crear</a> }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Dictionary<string, object?>> registros = new();
+    private bool cargando = true, mostrarFormulario = false, editando = false;
+    private string mensaje = string.Empty;
+    private bool exito = false;
+    private int campoNit, campoNit_orig = 0;
+    private string campoRazonSocial = string.Empty, campoNombreContacto = string.Empty, campoCorreo = string.Empty, campoTelefono = string.Empty, campoCiudad = string.Empty;
+    private int? limite = 20;
+    private string busqueda = string.Empty;
+
+    [Inject] IJSRuntime JSRuntime { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync() => await CargarRegistros();
+
+    private async Task CargarRegistros()
+    {
+        cargando = true;
+        try
+        {
+            registros = await Api.ListarAsync("aliado", limite);
+            if (!string.IsNullOrEmpty(busqueda))
+                registros = registros.Where(r =>
+                    (r["razon_social"]?.ToString()?.Contains(busqueda, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                    (r["nit"]?.ToString()?.Contains(busqueda) ?? false)
+                ).ToList();
+        }
+        catch (Exception ex) { mensaje = $"Error: {ex.Message}"; exito = false; }
+        finally { cargando = false; }
+    }
+
+    private void NuevoRegistro() { editando = false; campoNit = 0; campoRazonSocial = campoNombreContacto = campoCorreo = campoTelefono = campoCiudad = string.Empty; mostrarFormulario = true; mensaje = string.Empty; }
+    private void EditarRegistro(Dictionary<string, object?> reg) { editando = true; campoNit_orig = (int)reg["nit"]; campoNit = campoNit_orig; campoRazonSocial = reg["razon_social"]?.ToString() ?? ""; campoNombreContacto = reg["nombre_contacto"]?.ToString() ?? ""; campoCorreo = reg["correo"]?.ToString() ?? ""; campoTelefono = reg["telefono"]?.ToString() ?? ""; campoCiudad = reg["ciudad"]?.ToString() ?? ""; mostrarFormulario = true; mensaje = string.Empty; }
+
+    private async Task GuardarRegistro()
+    {
+        if (campoNit == 0 || string.IsNullOrEmpty(campoRazonSocial)) { mensaje = "NIT y Razón Social son requeridos."; return; }
+        var datos = new Dictionary<string, object?> { ["nit"] = campoNit, ["razon_social"] = campoRazonSocial, ["nombre_contacto"] = string.IsNullOrEmpty(campoNombreContacto) ? null : campoNombreContacto, ["correo"] = string.IsNullOrEmpty(campoCorreo) ? null : campoCorreo, ["telefono"] = string.IsNullOrEmpty(campoTelefono) ? null : campoTelefono, ["ciudad"] = string.IsNullOrEmpty(campoCiudad) ? null : campoCiudad };
+        var resultado = editando
+            ? await Api.ActualizarAsync("aliado", "nit", campoNit_orig.ToString(), datos)
+            : await Api.CrearAsync("aliado", datos);
+        exito = resultado.exito;
+        mensaje = resultado.mensaje;
+        if (exito) { mostrarFormulario = false; await CargarRegistros(); }
+    }
+
+    private async Task ConfirmarEliminar(Dictionary<string, object?> reg)
+    {
+        if (await JSRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro?"))
+        {
+            var resultado = await Api.EliminarAsync("aliado", "nit", reg["nit"]?.ToString() ?? "");
+            exito = resultado.exito;
+            mensaje = resultado.mensaje;
+            if (exito) await CargarRegistros();
+        }
+    }
+
+    private void Cancelar() { mostrarFormulario = false; mensaje = string.Empty; }
+}

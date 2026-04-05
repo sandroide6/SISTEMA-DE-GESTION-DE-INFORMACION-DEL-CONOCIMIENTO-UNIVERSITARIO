@@ -1,13 +1,13 @@
-@page "/dashboard/alianza"
+@page "/dashboard/pasantia"
 @rendermode InteractiveServer
 @inject FrontBlazor_AppiGenericaCsharp.Services.ApiService Api
 
-<PageTitle>Alianzas</PageTitle>
+<PageTitle>Pasantías</PageTitle>
 
 <div class="container mt-4">
     <div class="row mb-4">
         <div class="col-md-8">
-            <h3><i class="bi bi-link-45deg me-2"></i>Gestión de Alianzas</h3>
+            <h3><i class="bi bi-briefcase me-2"></i>Gestión de Pasantías</h3>
         </div>
         <div class="col-md-4 text-end">
             @if (!mostrarFormulario)
@@ -31,45 +31,37 @@
     {
         <div class="card mb-4 border-primary">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">@(editando ? "Editar Alianza" : "Nueva Alianza")</h5>
+                <h5 class="mb-0">@(editando ? "Editar Pasantía" : "Nueva Pasantía")</h5>
             </div>
             <div class="card-body">
                 <form @onsubmit="GuardarRegistro">
                     <div class="mb-3">
-                        <label class="form-label">Tipo <span class="text-danger">*</span></label>
-                        <input class="form-control" @bind="campoTipo" placeholder="Ej: Empresarial" required />
+                        <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                        <input class="form-control" @bind="campoNombre" placeholder="Nombre de la pasantía" required />
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Fecha Inicio <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" @bind="campoFechaInicio" required />
+                            <label class="form-label">País <span class="text-danger">*</span></label>
+                            <input class="form-control" @bind="campoPais" placeholder="Ej: Colombia" required />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Fecha Fin</label>
-                            <input type="date" class="form-control" @bind="campoFechaFin" />
+                            <label class="form-label">Empresa <span class="text-danger">*</span></label>
+                            <input class="form-control" @bind="campoEmpresa" placeholder="Nombre empresa" required />
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Aliado <span class="text-danger">*</span></label>
-                            <select class="form-select" @bind="campoNitAliado" required>
-                                <option value="">-- Seleccionar --</option>
-                                @foreach (var a in aliados)
-                                {
-                                    <option value="@a["nit"]">@($"{a["razon_social"]} (NIT: {a["nit"]})")</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">Docente Líder</label>
-                            <select class="form-select" @bind="campoIdDocenteLider">
-                                <option value="">-- Sin asignar --</option>
-                                @foreach (var d in docentes)
-                                {
-                                    <option value="@d["id"]">@d["nombre"]</option>
-                                }
-                            </select>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" rows="3" @bind="campoDescripcion" placeholder="Detalles de la pasantía..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Programa <span class="text-danger">*</span></label>
+                        <select class="form-select" @bind="campoIdPrograma" required>
+                            <option value="">-- Seleccionar --</option>
+                            @foreach (var p in programas)
+                            {
+                                <option value="@p["id"]">@p["nombre"]</option>
+                            }
+                        </select>
                     </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-success" disabled="@cargando">
@@ -87,8 +79,8 @@
         <div class="card-body">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">Buscar por tipo</label>
-                    <input type="text" class="form-control" @bind="busqueda" @bind:event="oninput" placeholder="Escribe para filtrar..." />
+                    <label class="form-label">Buscar</label>
+                    <input type="text" class="form-control" @bind="busqueda" @bind:event="oninput" placeholder="Nombre o país..." />
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Límite</label>
@@ -117,11 +109,10 @@
                 <thead class="table-dark">
                     <tr>
                         <th>ID</th>
-                        <th>Tipo</th>
-                        <th>Aliado</th>
-                        <th>Docente Líder</th>
-                        <th>Fecha Inicio</th>
-                        <th>Fecha Fin</th>
+                        <th>Nombre</th>
+                        <th>País</th>
+                        <th>Empresa</th>
+                        <th>Programa</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -130,11 +121,10 @@
                     {
                         <tr>
                             <td class="fw-bold text-primary">@reg["id"]</td>
-                            <td>@reg["tipo"]</td>
-                            <td><small>@(reg["razon_social"] ?? "—")</small></td>
-                            <td><small>@(reg["docente_nombre"] ?? "—")</small></td>
-                            <td><small>@(reg["fecha_inicio"] is DateTime d1 ? d1.ToString("dd/MM/yyyy") : "—")</small></td>
-                            <td><small>@(reg["fecha_fin"] is DateTime d2 ? d2.ToString("dd/MM/yyyy") : "—")</small></td>
+                            <td>@reg["nombre"]</td>
+                            <td><small>@(reg["pais"] ?? "—")</small></td>
+                            <td><small>@(reg["empresa"] ?? "—")</small></td>
+                            <td><span class="badge bg-secondary">@(reg["id_programa"] ?? "—")</span></td>
                             <td>
                                 <button class="btn btn-warning btn-sm me-2" @onclick="() => EditarRegistro(reg)"><i class="bi bi-pencil"></i></button>
                                 <button class="btn btn-danger btn-sm" @onclick="() => ConfirmarEliminar(reg)"><i class="bi bi-trash"></i></button>
@@ -149,16 +139,15 @@
     @if (!cargando && !registros.Any())
     {
         <div class="alert alert-warning text-center">
-            <i class="bi bi-inbox"></i> No hay alianzas. @if (!mostrarFormulario) { <a href="#" @onclick="NuevoRegistro">Crear</a> }
+            <i class="bi bi-inbox"></i> No hay pasantías. @if (!mostrarFormulario) { <a href="#" @onclick="NuevoRegistro">Crear</a> }
         </div>
     }
 </div>
 
 @code {
-    private List<Dictionary<string, object?>> registros = new(), aliados = new(), docentes = new();
+    private List<Dictionary<string, object?>> registros = new(), programas = new();
     private bool cargando = true, mostrarFormulario = false, editando = false;
-    private string mensaje = string.Empty, campoTipo = string.Empty, campoNitAliado = string.Empty, campoIdDocenteLider = string.Empty;
-    private DateTime? campoFechaInicio, campoFechaFin;
+    private string mensaje = string.Empty, campoNombre = string.Empty, campoPais = string.Empty, campoEmpresa = string.Empty, campoDescripcion = string.Empty, campoIdPrograma = string.Empty;
     private bool exito = false;
     private int? limite = 20;
     private string busqueda = string.Empty;
@@ -168,8 +157,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        aliados = await Api.ListarAsync("aliado", 200);
-        docentes = await Api.ListarAsync("docente", 200);
+        programas = await Api.ListarAsync("programa", 200);
         await CargarRegistros();
     }
 
@@ -178,10 +166,11 @@
         cargando = true;
         try
         {
-            registros = await Api.ListarAsync("alianza", limite);
+            registros = await Api.ListarAsync("pasantia", limite);
             if (!string.IsNullOrEmpty(busqueda))
                 registros = registros.Where(r =>
-                    r["tipo"]?.ToString()?.Contains(busqueda, StringComparison.OrdinalIgnoreCase) ?? false
+                    (r["nombre"]?.ToString()?.Contains(busqueda, StringComparison.OrdinalIgnoreCase) ?? false) ||
+                    (r["pais"]?.ToString()?.Contains(busqueda, StringComparison.OrdinalIgnoreCase) ?? false)
                 ).ToList();
         }
         catch (Exception ex) { mensaje = $"Error: {ex.Message}"; exito = false; }
@@ -191,8 +180,7 @@
     private void NuevoRegistro() 
     { 
         editando = false; 
-        campoTipo = campoNitAliado = campoIdDocenteLider = string.Empty; 
-        campoFechaInicio = campoFechaFin = null;
+        campoNombre = campoPais = campoEmpresa = campoDescripcion = campoIdPrograma = string.Empty;
         mostrarFormulario = true; 
         mensaje = string.Empty; 
     }
@@ -201,35 +189,35 @@
     { 
         editando = true; 
         registroIdOriginal = (int?)reg["id"];
-        campoTipo = reg["tipo"]?.ToString() ?? "";
-        campoNitAliado = reg["nit_aliado"]?.ToString() ?? "";
-        campoIdDocenteLider = reg["docente_lider"]?.ToString() ?? "";
-        campoFechaInicio = reg["fecha_inicio"] is DateTime d1 ? d1 : null;
-        campoFechaFin = reg["fecha_fin"] is DateTime d2 ? d2 : null;
+        campoNombre = reg["nombre"]?.ToString() ?? "";
+        campoPais = reg["pais"]?.ToString() ?? "";
+        campoEmpresa = reg["empresa"]?.ToString() ?? "";
+        campoDescripcion = reg["descripcion"]?.ToString() ?? "";
+        campoIdPrograma = reg["id_programa"]?.ToString() ?? "";
         mostrarFormulario = true; 
         mensaje = string.Empty; 
     }
 
     private async Task GuardarRegistro()
     {
-        if (string.IsNullOrEmpty(campoTipo) || string.IsNullOrEmpty(campoNitAliado) || !campoFechaInicio.HasValue) 
+        if (string.IsNullOrEmpty(campoNombre) || string.IsNullOrEmpty(campoPais) || string.IsNullOrEmpty(campoEmpresa) || string.IsNullOrEmpty(campoIdPrograma)) 
         { 
-            mensaje = "Tipo, Aliado y Fecha Inicio son requeridos."; 
+            mensaje = "Nombre, País, Empresa y Programa son requeridos."; 
             return; 
         }
 
         var datos = new Dictionary<string, object?>
         {
-            ["tipo"] = campoTipo,
-            ["fecha_inicio"] = campoFechaInicio?.ToString("yyyy-MM-dd"),
-            ["fecha_fin"] = campoFechaFin?.ToString("yyyy-MM-dd"),
-            ["nit_aliado"] = int.Parse(campoNitAliado),
-            ["docente_lider"] = string.IsNullOrEmpty(campoIdDocenteLider) ? null : (object?)int.Parse(campoIdDocenteLider)
+            ["nombre"] = campoNombre,
+            ["pais"] = campoPais,
+            ["empresa"] = campoEmpresa,
+            ["descripcion"] = string.IsNullOrEmpty(campoDescripcion) ? null : campoDescripcion,
+            ["id_programa"] = int.Parse(campoIdPrograma)
         };
 
         var resultado = editando
-            ? await Api.ActualizarAsync("alianza", "id", registroIdOriginal.ToString(), datos)
-            : await Api.CrearAsync("alianza", datos);
+            ? await Api.ActualizarAsync("pasantia", "id", registroIdOriginal.ToString(), datos)
+            : await Api.CrearAsync("pasantia", datos);
 
         exito = resultado.exito;
         mensaje = resultado.mensaje;
@@ -240,7 +228,7 @@
     {
         if (await JSRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro?"))
         {
-            var resultado = await Api.EliminarAsync("alianza", "id", reg["id"]?.ToString() ?? "");
+            var resultado = await Api.EliminarAsync("pasantia", "id", reg["id"]?.ToString() ?? "");
             exito = resultado.exito;
             mensaje = resultado.mensaje;
             if (exito) await CargarRegistros();

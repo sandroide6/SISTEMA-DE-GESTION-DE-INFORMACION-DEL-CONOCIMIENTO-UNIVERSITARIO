@@ -1,0 +1,192 @@
+@page "/dashboard/programa-principal"
+@rendermode InteractiveServer
+@inject FrontBlazor_AppiGenericaCsharp.Services.ApiService Api
+
+<PageTitle>Programas</PageTitle>
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h3><i class="bi bi-book-fill me-2"></i>Gestión de Programas</h3>
+        </div>
+        <div class="col-md-4 text-end">
+            @if (!mostrarFormulario)
+            {
+                <button class="btn btn-primary" @onclick="NuevoRegistro">
+                    <i class="bi bi-plus-circle"></i> Nuevo
+                </button>
+            }
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        <div class="alert @(exito ? "alert-success" : "alert-danger") alert-dismissible fade show">
+            @mensaje
+            <button type="button" class="btn-close" @onclick="() => mensaje = string.Empty"></button>
+        </div>
+    }
+
+    @if (mostrarFormulario)
+    {
+        <div class="card mb-4 border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@(editando ? "Editar Programa" : "Nuevo Programa")</h5>
+            </div>
+            <div class="card-body">
+                <form @onsubmit="GuardarRegistro">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                            <input class="form-control" @bind="campoNombre" placeholder="Ej: Ingeniería de Software" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Código</label>
+                            <input class="form-control" @bind="campoCodigo" placeholder="Ej: IS-001" disabled="@editando" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estado</label>
+                        <select class="form-select" @bind="campoEstado">
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success" disabled="@cargando">
+                            @if (cargando) { <span class="spinner-border spinner-border-sm me-2"></span> }
+                            Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary" @onclick="Cancelar">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Buscar por nombre</label>
+                    <input type="text" class="form-control" @bind="busqueda" @bind:event="oninput" placeholder="Escribe para filtrar..." />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Límite</label>
+                    <input type="number" class="form-control" @bind="limite" min="5" max="100" />
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-outline-primary w-100" @onclick="CargarRegistros">
+                        <i class="bi bi-arrow-clockwise"></i> Cargar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (cargando)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary"></div>
+        </div>
+    }
+
+    @if (!cargando && registros.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Código</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reg in registros)
+                    {
+                        <tr>
+                            <td class="fw-bold text-primary">@reg["id"]</td>
+                            <td>@reg["nombre"]</td>
+                            <td><span class="badge bg-info">@(reg["codigo"] ?? "N/A")</span></td>
+                            <td>
+                                @{ var estado = reg["estado"]?.ToString() ?? "activo";
+                                   var badge = estado == "activo" ? "bg-success" : "bg-danger"; }
+                                <span class="badge @badge">@estado</span>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm me-2" @onclick="() => EditarRegistro(reg)"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-danger btn-sm" @onclick="() => ConfirmarEliminar(reg)"><i class="bi bi-trash"></i></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @if (!cargando && !registros.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <i class="bi bi-inbox"></i> No hay programas. @if (!mostrarFormulario) { <a href="#" @onclick="NuevoRegistro">Crear</a> }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Dictionary<string, object?>> registros = new();
+    private bool cargando = true, mostrarFormulario = false, editando = false;
+    private string mensaje = string.Empty, campoNombre = string.Empty, campoCodigo = string.Empty, campoEstado = "activo";
+    private bool exito = false;
+    private int? limite = 20;
+    private string busqueda = string.Empty;
+
+    [Inject] IJSRuntime JSRuntime { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync() => await CargarRegistros();
+
+    private async Task CargarRegistros()
+    {
+        cargando = true;
+        try
+        {
+            registros = await Api.ListarAsync("programa", limite);
+            if (!string.IsNullOrEmpty(busqueda))
+                registros = registros.Where(r =>
+                    r["nombre"]?.ToString()?.Contains(busqueda, StringComparison.OrdinalIgnoreCase) ?? false
+                ).ToList();
+        }
+        catch (Exception ex) { mensaje = $"Error: {ex.Message}"; exito = false; }
+        finally { cargando = false; }
+    }
+
+    private void NuevoRegistro() { editando = false; campoNombre = campoCodigo = string.Empty; campoEstado = "activo"; mostrarFormulario = true; mensaje = string.Empty; }
+    private void EditarRegistro(Dictionary<string, object?> reg) { editando = true; campoNombre = reg["nombre"]?.ToString() ?? ""; campoCodigo = reg["codigo"]?.ToString() ?? ""; campoEstado = reg["estado"]?.ToString() ?? "activo"; mostrarFormulario = true; mensaje = string.Empty; }
+
+    private async Task GuardarRegistro()
+    {
+        if (string.IsNullOrEmpty(campoNombre)) { mensaje = "El nombre es requerido."; return; }
+        var datos = new Dictionary<string, object?> { ["nombre"] = campoNombre, ["codigo"] = string.IsNullOrEmpty(campoCodigo) ? null : campoCodigo, ["estado"] = campoEstado };
+        var resultado = editando
+            ? await Api.ActualizarAsync("programa", "nombre", campoNombre, datos)
+            : await Api.CrearAsync("programa", datos);
+        exito = resultado.exito;
+        mensaje = resultado.mensaje;
+        if (exito) { mostrarFormulario = false; await CargarRegistros(); }
+    }
+
+    private async Task ConfirmarEliminar(Dictionary<string, object?> reg)
+    {
+        if (await JSRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro?"))
+        {
+            var resultado = await Api.EliminarAsync("programa", "nombre", reg["nombre"]?.ToString() ?? "");
+            exito = resultado.exito;
+            mensaje = resultado.mensaje;
+            if (exito) await CargarRegistros();
+        }
+    }
+
+    private void Cancelar() { mostrarFormulario = false; mensaje = string.Empty; }
+}
