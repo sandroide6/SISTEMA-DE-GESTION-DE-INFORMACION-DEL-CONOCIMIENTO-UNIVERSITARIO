@@ -32,18 +32,37 @@ namespace FrontBlazor_AppiGenericaCsharp.Services
             try
             {
                 // Hace GET a la API y obtiene la respuesta como JSON
+                // Hace GET a la API 
                 string url = $"/api/{tabla}";
                 if (limite.HasValue)
                     url += $"?limite={limite.Value}";
 
-                var respuesta = await _http.GetFromJsonAsync<JsonElement>(url, _jsonOptions);
+                // 1. Hacemos la petición de forma segura
+                var responseMessage = await _http.GetAsync(url);
 
-                // Extrae la propiedad "datos" de la respuesta
-                if (respuesta.TryGetProperty("datos", out JsonElement datos))
+                if (responseMessage.IsSuccessStatusCode)
                 {
-                    return ConvertirDatos(datos);
-                }
+                    // 2. Leemos la respuesta como texto crudo primero
+                    var contentString = await responseMessage.Content.ReadAsStringAsync();
 
+                    // 3. Verificamos si la API devolvió algo vacío (causa de tu error)
+                    if (string.IsNullOrWhiteSpace(contentString))
+                    {
+                        // Si está vacío, devolvemos una lista vacía para que la tabla no explote
+                        return new List<Dictionary<string, object>>(); 
+                    }
+
+                    // 4. Si hay texto, lo deserializamos de forma segura
+                    var respuesta = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(contentString, _jsonOptions);
+
+                    // Extrae la propiedad "datos" de la respuesta
+                    if (respuesta.ValueKind != System.Text.Json.JsonValueKind.Undefined && 
+                        respuesta.TryGetProperty("datos", out System.Text.Json.JsonElement datos))
+                    {
+                        return ConvertirDatos(datos);
+                    }
+                }
+            // Retorno por defecto si algo falla o no hay datos
                 return new List<Dictionary<string, object?>>();
             }
             catch (HttpRequestException ex)

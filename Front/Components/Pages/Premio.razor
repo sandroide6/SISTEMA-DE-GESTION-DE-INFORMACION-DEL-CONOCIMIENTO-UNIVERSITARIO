@@ -1,0 +1,310 @@
+@page "/dashboard/premio"
+@rendermode InteractiveServer
+@inject FrontBlazor_AppiGenericaCsharp.Services.ApiService Api
+
+<PageTitle>Premio</PageTitle>
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h3>Gestión de Premio</h3>
+        </div>
+        <div class="col-md-4 text-end">
+            @if (!mostrarFormulario)
+            {
+                <button class="btn btn-primary" @onclick="NuevoRegistro">
+                    <i class="bi bi-plus-circle"></i> Nuevo
+                </button>
+            }
+        </div>
+    </div>
+
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        <div class="alert @(exito ? "alert-success" : "alert-danger") alert-dismissible fade show">
+            @mensaje
+            <button type="button" class="btn-close" @onclick="() => mensaje = string.Empty"></button>
+        </div>
+    }
+
+    @if (mostrarFormulario)
+    {
+        <div class="card mb-4 border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@(editando ? "Editar Registro" : "Nuevo Registro")</h5>
+            </div>
+
+            <div class="card-body">
+                <form @onsubmit="GuardarRegistro">
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                            <input class="form-control"
+                                   @bind="campoNombre"
+                                   required />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha</label>
+                            <input type="date"
+                                   class="form-control"
+                                   @bind="campoFecha" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Entidad Otorga</label>
+                            <input class="form-control"
+                                   @bind="campoEntidadOtorgante" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">País</label>
+                            <input class="form-control"
+                                   @bind="campoPais" />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Programa (FK)</label>
+                            <input type="number"
+                                   class="form-control"
+                                   @bind="campoPrograma" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control"
+                                  rows="3"
+                                  @bind="campoDescripcion"></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success" disabled="@cargando">
+                            Guardar
+                        </button>
+
+                        <button type="button" class="btn btn-secondary" @onclick="Cancelar">
+                            Cancelar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    }
+
+    @* ===================== FILTROS ===================== *@
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-6">
+                    <label class="form-label">Buscar por nombre</label>
+                    <input type="text"
+                           class="form-control"
+                           @bind="busqueda"
+                           @bind:event="oninput"
+                           placeholder="Escribe para filtrar..." />
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Límite</label>
+                    <input type="number"
+                           class="form-control"
+                           @bind="limite" />
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-outline-primary w-100"
+                            @onclick="CargarRegistros">
+                        Filtrar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @if (cargando)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary"></div>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Fecha</th>
+                    <th>Entidad</th>
+                    <th>País</th>
+                    <th>Programa</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var reg in registros)
+                {
+                    <tr>
+                        <td>@reg["id"]</td>
+                        <td>@reg["nombre"]</td>
+                        <td>@reg["fecha"]</td>
+                        <td>@reg["entidad_otorga"]</td>
+                        <td>@reg["pais"]</td>
+                        <td>@reg["programa"]</td>
+                        <td>@reg["descripcion"]</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm me-2"
+                                    @onclick="() => EditarRegistro(reg)">
+                                Editar
+                            </button>
+
+                            <button class="btn btn-danger btn-sm"
+                                    @onclick="() => ConfirmarEliminar(reg)">
+                                Eliminar
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private List<Dictionary<string, object?>> registros = new();
+    private bool cargando;
+    private bool mostrarFormulario;
+    private bool editando;
+
+    private string mensaje = "";
+    private bool exito;
+
+    private string campoNombre = "";
+    private string campoDescripcion = "";
+    private DateTime? campoFecha = DateTime.Now;
+    private string campoEntidadOtorgante = "";
+    private string campoPais = "";
+    private int campoPrograma;
+
+    private int? limite = 20;
+    private string busqueda = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarRegistros();
+    }
+
+    private async Task CargarRegistros()
+    {
+        cargando = true;
+
+        try
+        {
+            registros = await Api.ListarAsync("premio", limite);
+
+            if (!string.IsNullOrWhiteSpace(busqueda))
+            {
+                registros = registros.Where(r =>
+                    r["nombre"]?.ToString()?.Contains(busqueda, StringComparison.OrdinalIgnoreCase) ?? false
+                ).ToList();
+            }
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private void NuevoRegistro()
+    {
+        editando = false;
+
+        campoNombre = "";
+        campoDescripcion = "";
+        campoEntidadOtorgante = "";
+        campoPais = "";
+        campoPrograma = 0;
+        campoFecha = DateTime.Now;
+
+        mostrarFormulario = true;
+    }
+
+    private void EditarRegistro(Dictionary<string, object?> reg)
+    {
+        editando = true;
+
+        campoNombre = reg["nombre"]?.ToString() ?? "";
+        campoDescripcion = reg["descripcion"]?.ToString() ?? "";
+        campoEntidadOtorgante = reg["entidad_otorga"]?.ToString() ?? "";
+        campoPais = reg["pais"]?.ToString() ?? "";
+
+        campoPrograma = Convert.ToInt32(reg["programa"] ?? 0);
+
+        DateTime.TryParse(reg["fecha"]?.ToString(), out var fecha);
+        campoFecha = fecha;
+
+        mostrarFormulario = true;
+    }
+
+    private async Task GuardarRegistro()
+    {
+        var datos = new Dictionary<string, object?>
+        {
+            ["nombre"] = campoNombre,
+            ["descripcion"] = campoDescripcion,
+            ["fecha"] = campoFecha,
+            ["entidad_otorga"] = campoEntidadOtorgante,
+            ["pais"] = campoPais,
+            ["programa"] = campoPrograma
+        };
+
+        (bool exito, string mensaje) resultado;
+
+        if (editando)
+            resultado = await Api.ActualizarAsync("premio", "nombre", campoNombre, datos);
+        else
+            resultado = await Api.CrearAsync("premio", datos);
+
+        exito = resultado.exito;
+        mensaje = resultado.mensaje;
+
+        if (exito)
+        {
+            mostrarFormulario = false;
+            await CargarRegistros();
+        }
+    }
+
+    private async Task ConfirmarEliminar(Dictionary<string, object?> reg)
+    {
+        if (await JSRuntime.InvokeAsync<bool>("confirm", "¿Eliminar este registro?"))
+        {
+            string nombre = reg["nombre"]?.ToString() ?? "";
+            var res = await Api.EliminarAsync("premio", "nombre", nombre);
+
+            exito = res.exito;
+            mensaje = res.mensaje;
+
+            if (exito)
+                await CargarRegistros();
+        }
+    }
+
+    private void Cancelar()
+    {
+        mostrarFormulario = false;
+    }
+
+    [Inject] IJSRuntime JSRuntime { get; set; } = null!;
+}

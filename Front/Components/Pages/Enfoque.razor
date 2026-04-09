@@ -1,0 +1,305 @@
+@page "/dashboard/enfoque"
+@rendermode InteractiveServer
+@inject FrontBlazor_AppiGenericaCsharp.Services.ApiService Api
+
+<PageTitle>Enfoque</PageTitle>
+
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h3>Gestión de Enfoque</h3>
+        </div>
+        <div class="col-md-4 text-end">
+            @if (!mostrarFormulario)
+            {
+                <button class="btn btn-primary" @onclick="NuevoRegistro">
+                    <i class="bi bi-plus-circle"></i> Nuevo
+                </button>
+            }
+        </div>
+    </div>
+
+    @* ──────────────────────────────────── *@
+    @* ALERTA DE EXITO O ERROR              *@
+    @* ──────────────────────────────────── *@
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        <div class="alert @(exito ? "alert-success" : "alert-danger") alert-dismissible fade show">
+            @mensaje
+            <button type="button" class="btn-close" @onclick="() => mensaje = string.Empty"></button>
+        </div>
+    }
+
+    @* ──────────────────────────────────── *@
+    @* FORMULARIO (CREAR / EDITAR)         *@
+    @* ──────────────────────────────────── *@
+    @if (mostrarFormulario)
+    {
+        <div class="card mb-4 border-primary">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@(editando ? "Editar Registro" : "Nuevo Registro")</h5>
+            </div>
+            <div class="card-body">
+                <form @onsubmit="GuardarRegistro">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                            <input
+                                class="form-control"
+                                @bind="campoNombre"
+                                placeholder="Ej: Enfoque Social"
+                                required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea
+                            class="form-control"
+                            rows="3"
+                            @bind="campoDescripcion"
+                            placeholder="Describe el enfoque..."></textarea>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-success" disabled="@cargando">
+                            @if (cargando)
+                            {
+                                <span class="spinner-border spinner-border-sm me-2"></span>
+                            }
+                            Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary" @onclick="Cancelar">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+
+    @* ──────────────────────────────────── *@
+    @* FILTROS Y BÚSQUEDA                  *@
+    @* ──────────────────────────────────── *@
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Buscar por nombre</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        @bind="busqueda"
+                        @bind:event="oninput"
+                        placeholder="Escribe para filtrar..." />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Límite de registros</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        @bind="limite"
+                        min="5"
+                        max="100" />
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-outline-primary w-100" @onclick="CargarRegistros">
+                        <i class="bi bi-arrow-clockwise"></i> Cargar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ──────────────────────────────────── *@
+    @* SPINNER DE CARGA                   *@
+    @* ──────────────────────────────────── *@
+    @if (cargando)
+    {
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+    }
+
+    @* ──────────────────────────────────── *@
+    @* TABLA DE REGISTROS                 *@
+    @* ──────────────────────────────────── *@
+    @if (!cargando && registros.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reg in registros)
+                    {
+                        <tr>
+                            <td class="fw-bold text-primary">@reg["id"]</td>
+                            <td>@reg["nombre"]</td>
+                            <td>
+                                @{
+                                    var desc = reg["descripcion"]?.ToString() ?? "";
+                                    var descCorta = desc.Length > 50 ? desc[..50] + "..." : desc;
+                                }
+                                <small class="text-muted">@descCorta</small>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning btn-sm me-2" @onclick="() => EditarRegistro(reg)">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </button>
+                                <button class="btn btn-danger btn-sm" @onclick="() => ConfirmarEliminar(reg)">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    @* ──────────────────────────────────── *@
+    @* MENSAJE CUANDO NO HAY DATOS        *@
+    @* ──────────────────────────────────── *@
+    @if (!cargando && !registros.Any())
+    {
+        <div class="alert alert-warning text-center">
+            <i class="bi bi-inbox"></i> No se encontraron registros. @if (!mostrarFormulario) { <a href="#" @onclick="NuevoRegistro">Crear el primer registro</a> }
+        </div>
+    }
+</div>
+
+@code {
+    private List<Dictionary<string, object?>> registros = new();
+    private bool cargando = true;
+    private bool mostrarFormulario = false;
+    private bool editando = false;
+    private string mensaje = string.Empty;
+    private bool exito = false;
+
+    // Campos del formulario
+    private string campoNombre = string.Empty;
+    private string campoDescripcion = string.Empty;
+    private int? limite = 20;
+    private string busqueda = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarRegistros();
+    }
+
+    private async Task CargarRegistros()
+    {
+        cargando = true;
+        try
+        {
+            registros = await Api.ListarAsync("enfoque", limite);
+
+            if (!string.IsNullOrEmpty(busqueda))
+            {
+                registros = registros.Where(r =>
+                    r["nombre"]?.ToString()?.Contains(busqueda, StringComparison.OrdinalIgnoreCase) ?? false
+                ).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"Error al cargar: {ex.Message}";
+            exito = false;
+        }
+        finally
+        {
+            cargando = false;
+        }
+    }
+
+    private void NuevoRegistro()
+    {
+        editando = false;
+        campoNombre = string.Empty;
+        campoDescripcion = string.Empty;
+        mostrarFormulario = true;
+        mensaje = string.Empty;
+    }
+
+    private void EditarRegistro(Dictionary<string, object?> reg)
+    {
+        editando = true;
+        campoNombre = reg["nombre"]?.ToString() ?? "";
+        campoDescripcion = reg["descripcion"]?.ToString() ?? "";
+        mostrarFormulario = true;
+        mensaje = string.Empty;
+    }
+
+    private async Task GuardarRegistro()
+    {
+        if (string.IsNullOrEmpty(campoNombre))
+        {
+            mensaje = "El nombre es requerido";
+            return;
+        }
+
+        var datos = new Dictionary<string, object?>
+        {
+            ["nombre"] = campoNombre,
+            ["descripcion"] = string.IsNullOrEmpty(campoDescripcion) ? null : campoDescripcion
+        };
+
+        (bool exito, string mensaje) resultado;
+
+        if (editando)
+        {
+            resultado = await Api.ActualizarAsync("enfoque", "nombre", campoNombre, datos);
+        }
+        else
+        {
+            resultado = await Api.CrearAsync("enfoque", datos);
+        }
+
+        exito = resultado.exito;
+        mensaje = resultado.mensaje;
+
+        if (exito)
+        {
+            mostrarFormulario = false;
+            await CargarRegistros();
+        }
+    }
+
+    private async Task ConfirmarEliminar(Dictionary<string, object?> reg)
+    {
+        if (await JSRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro que deseas eliminar este registro?"))
+        {
+            await EliminarRegistro(reg);
+        }
+    }
+
+    private async Task EliminarRegistro(Dictionary<string, object?> reg)
+    {
+        string nombre = reg["nombre"]?.ToString() ?? "";
+        var resultado = await Api.EliminarAsync("enfoque", "nombre", nombre);
+        exito = resultado.exito;
+        mensaje = resultado.mensaje;
+
+        if (exito)
+        {
+            await CargarRegistros();
+        }
+    }
+
+    private void Cancelar()
+    {
+        mostrarFormulario = false;
+        mensaje = string.Empty;
+    }
+
+    [Inject] IJSRuntime JSRuntime { get; set; } = null!;
+}

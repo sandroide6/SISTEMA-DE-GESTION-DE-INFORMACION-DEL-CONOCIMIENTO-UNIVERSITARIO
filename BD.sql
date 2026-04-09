@@ -112,6 +112,46 @@ CREATE TABLE enfoque_rc (
     fecha_actualizacion DATETIME2 DEFAULT GETDATE()
 );
 GO
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'car_innovacion')
+CREATE TABLE car_innovacion (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nombre VARCHAR(45),
+    tipo VARCHAR(45),
+    descripcion VARCHAR(45)
+);
+GO
+
+-- Tabla: enfoque
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'enfoque')
+CREATE TABLE enfoque (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nombre VARCHAR(45),
+    descripcion VARCHAR(45)
+);
+GO
+
+-- Tabla: practica_estrategia
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'practica_estrategia')
+CREATE TABLE practica_estrategia (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    tipo VARCHAR(45),
+    nombre VARCHAR(45),
+    descripcion VARCHAR(45)
+);
+GO
+
+-- Tabla: premio
+IF NOT EXISTS (SELECT 1 FROM sys.tables WHERE name = 'premio')
+CREATE TABLE premio (
+    id INT IDENTITY(1,1) PRIMARY KEY,
+    nombre VARCHAR(45),
+    descripcion VARCHAR(45),
+    fecha DATE,
+    entidad_otorga VARCHAR(45),
+    pais VARCHAR(45),
+    programa INT
+);
+GO
 
 -- Insertar datos de ejemplo
 INSERT INTO docente_departamento (nombre, descripcion) VALUES
@@ -154,5 +194,23 @@ INSERT INTO enfoque_rc (nombre, descripcion) VALUES
 ('Enfoque por Proyectos', 'Aprendizaje basado en proyectos'),
 ('Enfoque por Investigación', 'Método científico aplicado');
 
+INSERT INTO car_innovacion (nombre, tipo, descripcion) VALUES
+('Innovación Digital', 'Tecnológica', 'Uso de herramientas digitales'),
+('Innovación Social', 'Social', 'Mejora de comunidades'),
+('Innovación Educativa', 'Educativa', 'Nuevas metodologías de enseñanza');
 
+INSERT INTO enfoque (nombre, descripcion) VALUES
+('Enfoque Investigativo', 'Basado en investigación científica'),
+('Enfoque Práctico', 'Aprendizaje mediante práctica'),
+('Enfoque Teórico', 'Fundamentos conceptuales sólidos');
+
+INSERT INTO practica_estrategia (tipo, nombre, descripcion) VALUES
+('Estrategia', 'Aprendizaje Colaborativo', 'Trabajo en equipo entre estudiantes'),
+('Práctica', 'Estudio de Casos', 'Análisis de situaciones reales'),
+('Estrategia', 'Aprendizaje Basado en Proyectos', 'Desarrollo de proyectos aplicados');
+
+INSERT INTO premio (nombre, descripcion, fecha, entidad_otorga, pais, programa) VALUES
+('Premio Excelencia Académica', 'Reconocimiento al desempeño', '2025-05-10', 'Ministerio de Educación', 'Colombia', 1),
+('Premio Innovación', 'Innovación en proyectos educativos', '2024-11-20', 'Universidad Nacional', 'Colombia', 2),
+('Premio Investigación', 'Mejor investigación aplicada', '2023-09-15', 'Consejo Científico', 'México', 3);
 GO
