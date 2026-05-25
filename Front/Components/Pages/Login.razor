@@ -1,0 +1,152 @@
+@page "/login"
+@rendermode InteractiveServer
+@inject FrontBlazor_AppiGenericaCsharp.Services.ApiService Api
+@inject NavigationManager Nav
+
+<PageTitle>Iniciar Sesión</PageTitle>
+
+<div class="login-container min-vh-100 d-flex align-items-center justify-content-center bg-gradient">
+    <div class="login-box">
+        <div class="login-header text-center mb-4">
+            <h1 class="fw-bold text-primary mb-2">Sistema de Innovación Curricular</h1>
+            <p class="text-muted">Iniciar Sesión</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(mensaje))
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @mensaje
+                <button type="button" class="btn-close" @onclick="LimpiarMensaje"></button>
+            </div>
+        }
+
+        <form @onsubmit="IniciarSesion">
+            <div class="mb-3">
+                <label for="username" class="form-label">Usuario</label>
+                <input 
+                    type="text" 
+                    class="form-control form-control-lg" 
+                    id="username" 
+                    placeholder="usuario"
+                    @bind="username"
+                    required />
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input 
+                    type="password" 
+                    class="form-control form-control-lg" 
+                    id="password" 
+                    placeholder="Tu contraseña"
+                    @bind="password"
+                    required />
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="remember" @bind="recuerdame">
+                <label class="form-check-label" for="remember">
+                    Recuérdame
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold mb-3" disabled="@cargando">
+                @if (cargando)
+                {
+                    <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    <span>Validando...</span>
+                }
+                else
+                {
+                    <span>Iniciar Sesión</span>
+                }
+            </button>
+        </form>
+
+        <div class="text-center mt-4">
+            <p class="text-muted">¿No tienes cuenta? <a href="/" class="text-primary fw-bold">Visita la página de inicio</a></p>
+        </div>
+
+        <div class="mt-4 pt-3 border-top">
+            <p class="text-center text-muted small">Credenciales de Prueba:</p>
+            <ul class="small text-muted list-unstyled">
+                <li><strong>Admin:</strong> admin / admin123</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<style>
+.bg-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-box {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-header {
+    margin-bottom: 30px;
+}
+
+.login-header h1 {
+    font-size: 28px;
+}
+
+.form-control:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+}
+</style>
+
+@code {
+    private string username = "";
+    private string password = "";
+    private bool recuerdame = true;
+    private bool cargando = false;
+    private string mensaje = "";
+
+    private async Task IniciarSesion()
+    {
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            mensaje = "Por favor completa todos los campos";
+            return;
+        }
+
+        cargando = true;
+
+        var resultado = await Api.LoginAsync(username, password);
+        if (resultado.exito)
+            Nav.NavigateTo("/", forceLoad: true);
+        else
+            mensaje = resultado.mensaje;
+
+        cargando = false;
+    }
+
+    private void LimpiarMensaje()
+    {
+        mensaje = "";
+    }
+}

@@ -1,0 +1,211 @@
+@inject FrontBlazor_AppiGenericaCsharp.Services.AuthSessionService Sesion
+@inject FrontBlazor_AppiGenericaCsharp.Services.ApiService Api
+@inject NavigationManager Nav
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Gestión Universitaria</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="nav flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill" aria-hidden="true"></span> Inicio
+            </NavLink>
+        </div>
+
+        @if (!Sesion.EstaAutenticado)
+        {
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="login">
+                    <span class="bi bi-box-arrow-in-right"></span> Iniciar sesión
+                </NavLink>
+            </div>
+        }
+        else
+        {
+            <div class="nav-item px-3 py-1 text-light small fw-bold">
+                <i class="bi bi-person-circle"></i> @Sesion.Username
+                @if (Sesion.EsAdmin) { <span class="badge bg-warning text-dark ms-1">Admin</span> }
+            </div>
+
+            <!-- ====== ENTREGA 1 ====== -->
+            <div class="nav-item px-3 mt-2">
+                <span class="text-warning small fw-bold"><i class="bi bi-1-circle"></i> Entrega 1</span>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/universidad">
+                    <i class="bi bi-building"></i> Universidades
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/facultad">
+                    <i class="bi bi-bank"></i> Facultades
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/programa">
+                    <i class="bi bi-mortarboard"></i> Programas
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/docente">
+                    <i class="bi bi-person-badge"></i> Docentes
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/departamento">
+                    <i class="bi bi-diagram-3"></i> Departamentos
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/docente-departamento">
+                    <i class="bi bi-person-workspace"></i> Docente-Depto.
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/aliado">
+                    <i class="bi bi-handshake"></i> Aliados
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/alianza">
+                    <i class="bi bi-link-45deg"></i> Alianzas
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/area-conocimiento">
+                    <i class="bi bi-grid-3x3-gap"></i> Áreas Conocim.
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/programa-ac">
+                    <i class="bi bi-award"></i> Programa-Área
+                </NavLink>
+            </div>
+
+            <!-- ====== ENTREGA 2 ====== -->
+            <div class="nav-item px-3 mt-2">
+                <span class="text-info small fw-bold"><i class="bi bi-2-circle"></i> Entrega 2</span>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/acreditacion">
+                    <i class="bi bi-patch-check"></i> Acreditaciones
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/registro-calificado">
+                    <i class="bi bi-file-earmark-check"></i> Reg. Calificado
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/disenio">
+                    <i class="bi bi-pencil-square"></i> Diseños
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/activ-academica">
+                    <i class="bi bi-journal-bookmark"></i> Activ. Académicas
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/pasantia">
+                    <i class="bi bi-briefcase"></i> Pasantías
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/premio">
+                    <i class="bi bi-trophy"></i> Premios
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/aspecto-normativo">
+                    <i class="bi bi-file-text"></i> Aspectos Normat.
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/an-programa">
+                    <i class="bi bi-graph-up"></i> AN-Programa
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/enfoque">
+                    <i class="bi bi-lightbulb"></i> Enfoques
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/enfoque-rc">
+                    <i class="bi bi-lightbulb-fill"></i> Enfoque-RC
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/practica-estrategia">
+                    <i class="bi bi-compass"></i> Prác. Estrategia
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/programa-pe">
+                    <i class="bi bi-layers"></i> Programa-PE
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/car-innovacion">
+                    <i class="bi bi-rocket"></i> Car. Innovación
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/programa-ci">
+                    <i class="bi bi-rocket-takeoff"></i> Programa-CI
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="dashboard/aa-rc">
+                    <i class="bi bi-journal-text"></i> AA-RC
+                </NavLink>
+            </div>
+
+            <!-- ====== ADMINISTRACIÓN ====== -->
+            @if (Sesion.EsAdmin)
+            {
+                <div class="nav-item px-3 mt-2">
+                    <span class="text-danger small fw-bold"><i class="bi bi-shield-lock"></i> Administración</span>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="usuario">
+                        <i class="bi bi-people"></i> Usuarios
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="rol">
+                        <i class="bi bi-shield"></i> Roles
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="rol-usuario">
+                        <i class="bi bi-person-check"></i> Rol-Usuario
+                    </NavLink>
+                </div>
+            }
+
+            <div class="nav-item px-3 mt-3 mb-2">
+                <button class="btn btn-sm btn-outline-light w-100" @onclick="CerrarSesion">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+                </button>
+            </div>
+        }
+    </nav>
+</div>
+
+@code {
+    private async Task CerrarSesion()
+    {
+        await Api.LogoutAsync();
+        Nav.NavigateTo("/", forceLoad: true);
+    }
+}

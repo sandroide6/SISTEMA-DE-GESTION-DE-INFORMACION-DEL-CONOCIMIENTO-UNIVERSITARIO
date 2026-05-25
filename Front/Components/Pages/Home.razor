@@ -1,0 +1,320 @@
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Sistema de Innovación Curricular</PageTitle>
+
+<div class="homepage">
+    <!-- Encabezado/Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="/">
+                <span class="badge bg-light text-primary me-2">SIC</span>
+                Sistema de Innovación Curricular
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#soporte">Soporte</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#contacto">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/#nosotros">Sobre Nosotros</a></li>
+                    <li class="nav-item">
+                        <a class="btn btn-light btn-sm ms-2" href="/login">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="hero bg-gradient text-white py-5">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-4">Innovación Curricular en Educación</h1>
+            <p class="lead mb-4">Plataforma integral para diseñar, evaluar e implementar innovaciones educativas</p>
+            <div>
+                <a href="/login" class="btn btn-light btn-lg me-3 fw-bold">
+                    Acceso al Sistema
+                </a>
+                <a href="#servicios" class="btn btn-outline-light btn-lg fw-bold">
+                    Conocer Más
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Propuesta de Valor -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">¿Por qué elegir nuestro sistema?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body p-4">
+                            <div class="display-6 text-primary mb-3">🎯</div>
+                            <h5 class="card-title fw-bold">Diseño Estructurado</h5>
+                            <p class="card-text">Herramientas para diseñar currículos innovadores con metodología probada</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body p-4">
+                            <div class="display-6 text-success mb-3">📊</div>
+                            <h5 class="card-title fw-bold">Evaluación Integral</h5>
+                            <p class="card-text">Sistema completo de evaluación de propuestas de innovación educativa</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm text-center">
+                        <div class="card-body p-4">
+                            <div class="display-6 text-info mb-3">🚀</div>
+                            <h5 class="card-title fw-bold">Implementación Ágil</h5>
+                            <p class="card-text">Seguimiento y monitoreo en tiempo real del progreso de innovaciones</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios Destacados -->
+    <section id="servicios" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">Nuestros Servicios Principales</h2>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="service-box d-flex p-4 border-start border-4 border-primary">
+                        <div class="me-4">
+                            <h5 class="fw-bold text-primary">Gestión de Programas Académicos</h5>
+                            <p class="text-muted mb-0">Administra programas con áreas de conocimiento, enfoques de formación y niveles académicos</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="service-box d-flex p-4 border-start border-4 border-success">
+                        <div class="me-4">
+                            <h5 class="fw-bold text-success">Catálogo de Asignaturas</h5>
+                            <p class="text-muted mb-0">Base de datos completa de asignaturas por tipo y modalidad de enseñanza</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="service-box d-flex p-4 border-start border-4 border-info">
+                        <div class="me-4">
+                            <h5 class="fw-bold text-info">Propuestas de Innovación</h5>
+                            <p class="text-muted mb-0">Crea, presenta y gestiona propuestas para mejorar la experiencia educativa</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="service-box d-flex p-4 border-start border-4 border-warning">
+                        <div class="me-4">
+                            <h5 class="fw-bold text-warning">Evaluación y Seguimiento</h5>
+                            <p class="text-muted mb-0">Herramientas para evaluar el impacto y seguimiento de innovaciones implementadas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">Casos de Éxito</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <span class="badge bg-warning">★★★★★</span>
+                            </div>
+                            <p class="card-text">"El sistema nos permitió implementar metodología de aprendizaje basado en proyectos de forma integral"</p>
+                            <p class="card-text fw-bold">Dr. Juan Pérez - Director Académico</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <span class="badge bg-warning">★★★★★</span>
+                            </div>
+                            <p class="card-text">"Simplificó enormemente el seguimiento de nuestras innovaciones educativas y su impacto"</p>
+                            <p class="card-text fw-bold">Dra. María García - Coordinadora de Innovación</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Soporte -->
+    <section id="soporte" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">Centro de Soporte</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-bold">Documentación</h5>
+                            <p class="card-text">Guías completas y manuales de uso del sistema</p>
+                            <a href="#" class="btn btn-sm btn-primary">Acceder</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-bold">Preguntas Frecuentes</h5>
+                            <p class="card-text">Respuestas a las dudas más comunes</p>
+                            <a href="#" class="btn btn-sm btn-primary">Ver FAQs</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title fw-bold">Contacto Técnico</h5>
+                            <p class="card-text">Soporte directo para problemas urgentes</p>
+                            <a href="#contacto" class="btn btn-sm btn-primary">Contactar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">Ponte en Contacto</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-3">Formulario de Contacto</h5>
+                            <form>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="Tu Nombre" required>
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" placeholder="Tu Email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <textarea class="form-control" rows="4" placeholder="Tu Mensaje" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Enviar Mensaje</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Información de Contacto</h5>
+                            <div class="mb-4">
+                                <h6 class="fw-bold">Correo Electrónico</h6>
+                                <p class="text-muted">soporte@innovacioncurricular.edu</p>
+                            </div>
+                            <div class="mb-4">
+                                <h6 class="fw-bold">Teléfono</h6>
+                                <p class="text-muted">+1 (555) 123-4567</p>
+                            </div>
+                            <div class="mb-4">
+                                <h6 class="fw-bold">Dirección</h6>
+                                <p class="text-muted">Calle Principal 123, Ciudad Educativa</p>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold">Redes Sociales</h6>
+                                <p>
+                                    <a href="#" class="text-primary me-3">Facebook</a>
+                                    <a href="#" class="text-primary me-3">Twitter</a>
+                                    <a href="#" class="text-primary">LinkedIn</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros -->
+    <section id="nosotros" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">Sobre Nosotros</h2>
+            <div class="row g-4">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-5">
+                            <h5 class="fw-bold mb-3">Nuestra Historia</h5>
+                            <p class="text-muted mb-4">
+                                Somos una iniciativa dedicada a transformar la educación superior a través de la innovación curricular. 
+                                Fundada con la misión de facilitar la creación e implementación de propuestas educativas innovadoras.
+                            </p>
+
+                            <h5 class="fw-bold mb-3 mt-4">Misión</h5>
+                            <p class="text-muted mb-4">
+                                Proveer herramientas y espacios para que instituciones educativas diseñen, evalúen e implementen 
+                                innovaciones curriculares que mejoren la calidad y pertinencia de la educación.
+                            </p>
+
+                            <h5 class="fw-bold mb-3">Visión</h5>
+                            <p class="text-muted mb-4">
+                                Ser la plataforma líder en América Latina para la gestión de innovación educativa, 
+                                promoviendo educación de calidad, inclusiva y transformadora.
+                            </p>
+
+                            <h5 class="fw-bold mb-3">Nuestros Valores</h5>
+                            <ul class="text-muted">
+                                <li><strong>Innovación:</strong> Propulsamos cambios positivos en educación</li>
+                                <li><strong>Excelencia:</strong> Comprometidos con la calidad en todo lo que hacemos</li>
+                                <li><strong>Colaboración:</strong> Creemos en el trabajo conjunto para lograr objetivos</li>
+                                <li><strong>Transparencia:</strong> Operamos con claridad y honestidad</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2026 Sistema de Innovación Curricular. Todos los derechos reservados.</p>
+            <p class="small text-muted mt-2">Desarrollado con dedicación a la excelencia educativa</p>
+        </div>
+    </footer>
+</div>
+
+<style>
+    .bg-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .hero {
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .service-box {
+        border-radius: 8px;
+        background: white;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .service-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+</style>

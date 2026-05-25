@@ -1,0 +1,102 @@
+@page "/rol-usuario"
+@rendermode InteractiveServer
+@inject FrontBlazor_AppiGenericaCsharp.Services.ApiService Api
+@inject FrontBlazor_AppiGenericaCsharp.Services.AuthSessionService Sesion
+@inject NavigationManager Nav
+
+<PageTitle>Rol Usuario</PageTitle>
+
+<div class="container mt-4">
+    <h3>Asignación Rol-Usuario</h3>
+
+    @if (!string.IsNullOrEmpty(mensaje))
+    {
+        <div class="alert @(exito ? "alert-success" : "alert-danger")">@mensaje</div>
+    }
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Usuario ID</label>
+                    <input class="form-control" @bind="usuarioId" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Rol ID</label>
+                    <input class="form-control" @bind="rolId" />
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <button class="btn btn-primary me-2" @onclick="Crear">Asignar</button>
+                    <button class="btn btn-danger" @onclick="Eliminar">Quitar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-outline-secondary mb-3" @onclick="Cargar">Recargar</button>
+
+    @if (registros.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>usuario_id</th>
+                    <th>rol_id</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reg in registros)
+                {
+                    <tr>
+                        <td>@reg.GetValueOrDefault("usuario_id")</td>
+                        <td>@reg.GetValueOrDefault("rol_id")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    private List<Dictionary<string, object?>> registros = new();
+    private string usuarioId = "";
+    private string rolId = "";
+    private string mensaje = "";
+    private bool exito;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!Sesion.EsAdmin)
+        {
+            Nav.NavigateTo("/", true);
+            return;
+        }
+        await Cargar();
+    }
+
+    private async Task Cargar()
+    {
+        registros = await Api.ListarAsync("rol_usuario");
+    }
+
+    private async Task Crear()
+    {
+        var datos = new Dictionary<string, object?>
+        {
+            ["usuario_id"] = usuarioId,
+            ["rol_id"] = rolId
+        };
+        var r = await Api.CrearAsync("rol_usuario", datos);
+        exito = r.exito;
+        mensaje = r.mensaje;
+        if (exito) await Cargar();
+    }
+
+    private async Task Eliminar()
+    {
+        var r = await Api.EliminarAsync("rol_usuario", "usuario_id", usuarioId);
+        exito = r.exito;
+        mensaje = r.mensaje;
+        if (exito) await Cargar();
+    }
+}
