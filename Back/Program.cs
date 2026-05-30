@@ -18,6 +18,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ApiGenericaCsharp.Modelos; // donde está ConfiguracionJwt
+<<<<<<< HEAD
+=======
+using ApiGenericaCsharp.Middlewares;
+>>>>>>> SantiagoEcheverriDev
 
 // Crea el "builder": punto de inicio para configurar servicios y la aplicación.
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +44,10 @@ builder.Configuration.AddJsonFile(
 
 // Agrega soporte para controladores. Los controladores viven en la carpeta "Controllers".
 builder.Services.AddControllers();
+<<<<<<< HEAD
+=======
+builder.Services.AddAuthorization();
+>>>>>>> SantiagoEcheverriDev
 
 // CORS (Cross-Origin Resource Sharing) Intercambio de recursos de origen cruzado
 // Permite que la API sea consumida desde otros dominios.
@@ -265,6 +273,12 @@ app.UseSession();
 // Activa la autenticación JWT antes de aplicar la autorización.
 app.UseAuthentication();
 
+<<<<<<< HEAD
+=======
+// Middleware de autorización por rol según tabla/operación.
+app.UseMiddleware<RoleAuthorizationMiddleware>();
+
+>>>>>>> SantiagoEcheverriDev
 // Agrega el middleware de autorización.
 app.UseAuthorization();
 

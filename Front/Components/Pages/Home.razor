@@ -1,5 +1,6 @@
 @page "/"
 @rendermode InteractiveServer
+<<<<<<< HEAD
 
 <PageTitle>Sistema de Innovación Curricular</PageTitle>
 
@@ -10,11 +11,29 @@
             <a class="navbar-brand fw-bold" href="/">
                 <span class="badge bg-light text-primary me-2">SIC</span>
                 Sistema de Innovación Curricular
+=======
+@layout FrontBlazor_AppiGenericaCsharp.Components.Layout.LoginLayout
+@inject FrontBlazor_AppiGenericaCsharp.Services.AuthSessionService Sesion
+@inject NavigationManager Nav
+
+<PageTitle>SIGCU — Sistema Integrado de Gestión del Conocimiento Universitario</PageTitle>
+
+<div class="homepage">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background:linear-gradient(90deg,#1a237e,#1565c0);">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="/">
+                <div style="width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:7px;display:flex;align-items:center;justify-content:center;">
+                    <i class="bi bi-mortarboard-fill"></i>
+                </div>
+                <span>SIGCU</span>
+>>>>>>> SantiagoEcheverriDev
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+<<<<<<< HEAD
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="/#inicio">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="/#servicios">Servicios</a></li>
@@ -27,10 +46,34 @@
                         </a>
                     </li>
                 </ul>
+=======
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#soporte">Soporte</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contacto">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#nosotros">Sobre Nosotros</a></li>
+                </ul>
+                <div class="navbar-nav">
+                    @if (Sesion.EstaAutenticado)
+                    {
+                        <a class="btn btn-light btn-sm ms-2" href="/dashboard/universidad">
+                            <i class="bi bi-grid"></i> Ir al Dashboard
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-light btn-sm ms-2" href="/login">
+                            <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                        </a>
+                    }
+                </div>
+>>>>>>> SantiagoEcheverriDev
             </div>
         </div>
     </nav>
 
+<<<<<<< HEAD
     <!-- Hero Section -->
     <section id="inicio" class="hero bg-gradient text-white py-5">
         <div class="container text-center">
@@ -43,11 +86,41 @@
                 <a href="#servicios" class="btn btn-outline-light btn-lg fw-bold">
                     Conocer Más
                 </a>
+=======
+    <!-- Hero -->
+    <section id="inicio" class="hero text-white py-5">
+        <div class="container text-center py-4">
+            <div class="mb-3">
+                <span class="badge px-3 py-2" style="background:rgba(255,255,255,.15);font-size:.85rem;border-radius:20px;">
+                    <i class="bi bi-mortarboard-fill me-1"></i> Sistema Integrado de Gestión del Conocimiento Universitario
+                </span>
+            </div>
+            <h1 class="display-4 fw-bold mb-3">Bienvenido a <span style="color:#90caf9;">SIGCU</span></h1>
+            <p class="lead mb-4">Plataforma integral para gestionar el conocimiento universitario:<br/>programas, acreditaciones, docentes, alianzas y más.</p>
+            <div>
+                @if (Sesion.EstaAutenticado)
+                {
+                    <a href="/dashboard/universidad" class="btn btn-light btn-lg me-3 fw-bold">
+                        <i class="bi bi-grid me-1"></i> Ir al Dashboard
+                    </a>
+                }
+                else
+                {
+                    <a href="/login" class="btn btn-light btn-lg me-3 fw-bold">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Acceso al Sistema
+                    </a>
+                }
+                <a href="#servicios" class="btn btn-outline-light btn-lg fw-bold">Conocer Más</a>
+>>>>>>> SantiagoEcheverriDev
             </div>
         </div>
     </section>
 
+<<<<<<< HEAD
     <!-- Propuesta de Valor -->
+=======
+    <!-- Por qué elegirnos -->
+>>>>>>> SantiagoEcheverriDev
     <section class="py-5 bg-light">
         <div class="container">
             <h2 class="text-center mb-5 fw-bold">¿Por qué elegir nuestro sistema?</h2>
@@ -57,7 +130,11 @@
                         <div class="card-body p-4">
                             <div class="display-6 text-primary mb-3">🎯</div>
                             <h5 class="card-title fw-bold">Diseño Estructurado</h5>
+<<<<<<< HEAD
                             <p class="card-text">Herramientas para diseñar currículos innovadores con metodología probada</p>
+=======
+                            <p class="card-text text-muted">Herramientas para diseñar currículos innovadores con metodología probada</p>
+>>>>>>> SantiagoEcheverriDev
                         </div>
                     </div>
                 </div>
@@ -66,7 +143,11 @@
                         <div class="card-body p-4">
                             <div class="display-6 text-success mb-3">📊</div>
                             <h5 class="card-title fw-bold">Evaluación Integral</h5>
+<<<<<<< HEAD
                             <p class="card-text">Sistema completo de evaluación de propuestas de innovación educativa</p>
+=======
+                            <p class="card-text text-muted">Sistema completo de evaluación de propuestas de innovación educativa</p>
+>>>>>>> SantiagoEcheverriDev
                         </div>
                     </div>
                 </div>
@@ -75,7 +156,11 @@
                         <div class="card-body p-4">
                             <div class="display-6 text-info mb-3">🚀</div>
                             <h5 class="card-title fw-bold">Implementación Ágil</h5>
+<<<<<<< HEAD
                             <p class="card-text">Seguimiento y monitoreo en tiempo real del progreso de innovaciones</p>
+=======
+                            <p class="card-text text-muted">Seguimiento y monitoreo en tiempo real del progreso de innovaciones</p>
+>>>>>>> SantiagoEcheverriDev
                         </div>
                     </div>
                 </div>
@@ -83,12 +168,17 @@
         </div>
     </section>
 
+<<<<<<< HEAD
     <!-- Servicios Destacados -->
+=======
+    <!-- Servicios -->
+>>>>>>> SantiagoEcheverriDev
     <section id="servicios" class="py-5">
         <div class="container">
             <h2 class="text-center mb-5 fw-bold">Nuestros Servicios Principales</h2>
             <div class="row g-4">
                 <div class="col-lg-6">
+<<<<<<< HEAD
                     <div class="service-box d-flex p-4 border-start border-4 border-primary">
                         <div class="me-4">
                             <h5 class="fw-bold text-primary">Gestión de Programas Académicos</h5>
@@ -118,6 +208,29 @@
                             <h5 class="fw-bold text-warning">Evaluación y Seguimiento</h5>
                             <p class="text-muted mb-0">Herramientas para evaluar el impacto y seguimiento de innovaciones implementadas</p>
                         </div>
+=======
+                    <div class="service-box p-4 border-start border-4 border-primary bg-white rounded shadow-sm">
+                        <h5 class="fw-bold text-primary"><i class="bi bi-mortarboard me-2"></i>Gestión de Programas Académicos</h5>
+                        <p class="text-muted mb-0">Administra programas con áreas de conocimiento, enfoques de formación y niveles académicos</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="service-box p-4 border-start border-4 border-success bg-white rounded shadow-sm">
+                        <h5 class="fw-bold text-success"><i class="bi bi-journal-bookmark me-2"></i>Catálogo de Asignaturas</h5>
+                        <p class="text-muted mb-0">Base de datos completa de asignaturas por tipo y modalidad de enseñanza</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="service-box p-4 border-start border-4 border-info bg-white rounded shadow-sm">
+                        <h5 class="fw-bold text-info"><i class="bi bi-lightbulb me-2"></i>Propuestas de Innovación</h5>
+                        <p class="text-muted mb-0">Crea, presenta y gestiona propuestas para mejorar la experiencia educativa</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="service-box p-4 border-start border-4 border-warning bg-white rounded shadow-sm">
+                        <h5 class="fw-bold text-warning"><i class="bi bi-graph-up me-2"></i>Evaluación y Seguimiento</h5>
+                        <p class="text-muted mb-0">Herramientas para evaluar el impacto y seguimiento de innovaciones implementadas</p>
+>>>>>>> SantiagoEcheverriDev
                     </div>
                 </div>
             </div>
@@ -130,6 +243,7 @@
             <h2 class="text-center mb-5 fw-bold">Casos de Éxito</h2>
             <div class="row g-4">
                 <div class="col-md-6">
+<<<<<<< HEAD
                     <div class="card border-0 shadow-sm">
                         <div class="card-body">
                             <div class="mb-3">
@@ -137,10 +251,19 @@
                             </div>
                             <p class="card-text">"El sistema nos permitió implementar metodología de aprendizaje basado en proyectos de forma integral"</p>
                             <p class="card-text fw-bold">Dr. Juan Pérez - Director Académico</p>
+=======
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <div class="mb-2"><span class="text-warning fw-bold">★★★★★</span></div>
+                            <p class="card-text fst-italic">"El sistema nos permitió implementar metodología de aprendizaje basado en proyectos de forma integral y estructurada."</p>
+                            <p class="card-text fw-bold mb-0">Dr. Juan Pérez</p>
+                            <small class="text-muted">Director Académico</small>
+>>>>>>> SantiagoEcheverriDev
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
+<<<<<<< HEAD
                     <div class="card border-0 shadow-sm">
                         <div class="card-body">
                             <div class="mb-3">
@@ -148,6 +271,14 @@
                             </div>
                             <p class="card-text">"Simplificó enormemente el seguimiento de nuestras innovaciones educativas y su impacto"</p>
                             <p class="card-text fw-bold">Dra. María García - Coordinadora de Innovación</p>
+=======
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <div class="mb-2"><span class="text-warning fw-bold">★★★★★</span></div>
+                            <p class="card-text fst-italic">"Simplificó enormemente el seguimiento de nuestras innovaciones educativas y la medición de su impacto."</p>
+                            <p class="card-text fw-bold mb-0">Dra. María García</p>
+                            <small class="text-muted">Coordinadora de Innovación</small>
+>>>>>>> SantiagoEcheverriDev
                         </div>
                     </div>
                 </div>
@@ -159,6 +290,7 @@
     <section id="soporte" class="py-5">
         <div class="container">
             <h2 class="text-center mb-5 fw-bold">Centro de Soporte</h2>
+<<<<<<< HEAD
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card text-center border-0 shadow-sm">
@@ -166,24 +298,49 @@
                             <h5 class="card-title fw-bold">Documentación</h5>
                             <p class="card-text">Guías completas y manuales de uso del sistema</p>
                             <a href="#" class="btn btn-sm btn-primary">Acceder</a>
+=======
+            <div class="row g-4 text-center">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <i class="bi bi-book text-primary" style="font-size:2rem;"></i>
+                            <h5 class="card-title fw-bold mt-3">Documentación</h5>
+                            <p class="card-text text-muted">Guías completas y manuales de uso del sistema</p>
+>>>>>>> SantiagoEcheverriDev
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
+<<<<<<< HEAD
                     <div class="card text-center border-0 shadow-sm">
                         <div class="card-body p-4">
                             <h5 class="card-title fw-bold">Preguntas Frecuentes</h5>
                             <p class="card-text">Respuestas a las dudas más comunes</p>
                             <a href="#" class="btn btn-sm btn-primary">Ver FAQs</a>
+=======
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <i class="bi bi-question-circle text-success" style="font-size:2rem;"></i>
+                            <h5 class="card-title fw-bold mt-3">Preguntas Frecuentes</h5>
+                            <p class="card-text text-muted">Respuestas a las dudas más comunes de nuestros usuarios</p>
+>>>>>>> SantiagoEcheverriDev
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
+<<<<<<< HEAD
                     <div class="card text-center border-0 shadow-sm">
                         <div class="card-body p-4">
                             <h5 class="card-title fw-bold">Contacto Técnico</h5>
                             <p class="card-text">Soporte directo para problemas urgentes</p>
                             <a href="#contacto" class="btn btn-sm btn-primary">Contactar</a>
+=======
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <i class="bi bi-headset text-info" style="font-size:2rem;"></i>
+                            <h5 class="card-title fw-bold mt-3">Contacto Técnico</h5>
+                            <p class="card-text text-muted">Soporte directo para problemas urgentes</p>
+>>>>>>> SantiagoEcheverriDev
                         </div>
                     </div>
                 </div>
@@ -200,6 +357,7 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-body p-4">
                             <h5 class="fw-bold mb-3">Formulario de Contacto</h5>
+<<<<<<< HEAD
                             <form>
                                 <div class="mb-3">
                                     <input type="text" class="form-control" placeholder="Tu Nombre" required>
@@ -212,10 +370,23 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100">Enviar Mensaje</button>
                             </form>
+=======
+                            <div class="mb-3">
+                                <input type="text" class="form-control" placeholder="Tu Nombre" />
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" placeholder="Tu Email" />
+                            </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" rows="4" placeholder="Tu Mensaje"></textarea>
+                            </div>
+                            <button class="btn btn-primary w-100">Enviar Mensaje</button>
+>>>>>>> SantiagoEcheverriDev
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
+<<<<<<< HEAD
                     <div class="card border-0 shadow-sm">
                         <div class="card-body p-4">
                             <h5 class="fw-bold mb-4">Información de Contacto</h5>
@@ -238,6 +409,19 @@
                                     <a href="#" class="text-primary me-3">Twitter</a>
                                     <a href="#" class="text-primary">LinkedIn</a>
                                 </p>
+=======
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body p-4">
+                            <h5 class="fw-bold mb-4">Información de Contacto</h5>
+                            <p><i class="bi bi-envelope text-primary me-2"></i><strong>Email:</strong> soporte@innovacioncurricular.edu</p>
+                            <p><i class="bi bi-telephone text-primary me-2"></i><strong>Teléfono:</strong> +57 (601) 123-4567</p>
+                            <p><i class="bi bi-geo-alt text-primary me-2"></i><strong>Dirección:</strong> Calle Principal 123, Colombia</p>
+                            <div class="mt-4">
+                                <h6 class="fw-bold">Redes Sociales</h6>
+                                <a href="#" class="btn btn-outline-primary btn-sm me-2"><i class="bi bi-facebook"></i></a>
+                                <a href="#" class="btn btn-outline-info btn-sm me-2"><i class="bi bi-twitter"></i></a>
+                                <a href="#" class="btn btn-outline-primary btn-sm"><i class="bi bi-linkedin"></i></a>
+>>>>>>> SantiagoEcheverriDev
                             </div>
                         </div>
                     </div>
@@ -250,11 +434,16 @@
     <section id="nosotros" class="py-5">
         <div class="container">
             <h2 class="text-center mb-5 fw-bold">Sobre Nosotros</h2>
+<<<<<<< HEAD
             <div class="row g-4">
+=======
+            <div class="row">
+>>>>>>> SantiagoEcheverriDev
                 <div class="col-lg-8 mx-auto">
                     <div class="card border-0 shadow-sm">
                         <div class="card-body p-5">
                             <h5 class="fw-bold mb-3">Nuestra Historia</h5>
+<<<<<<< HEAD
                             <p class="text-muted mb-4">
                                 Somos una iniciativa dedicada a transformar la educación superior a través de la innovación curricular. 
                                 Fundada con la misión de facilitar la creación e implementación de propuestas educativas innovadoras.
@@ -271,6 +460,15 @@
                                 Ser la plataforma líder en América Latina para la gestión de innovación educativa, 
                                 promoviendo educación de calidad, inclusiva y transformadora.
                             </p>
+=======
+                            <p class="text-muted mb-4">Somos una iniciativa dedicada a transformar la educación superior a través de la innovación curricular. Fundada con la misión de facilitar la creación e implementación de propuestas educativas innovadoras.</p>
+
+                            <h5 class="fw-bold mb-3">Misión</h5>
+                            <p class="text-muted mb-4">Proveer herramientas y espacios para que instituciones educativas diseñen, evalúen e implementen innovaciones curriculares que mejoren la calidad y pertinencia de la educación.</p>
+
+                            <h5 class="fw-bold mb-3">Visión</h5>
+                            <p class="text-muted mb-4">Ser la plataforma líder en América Latina para la gestión de innovación educativa, promoviendo educación de calidad, inclusiva y transformadora.</p>
+>>>>>>> SantiagoEcheverriDev
 
                             <h5 class="fw-bold mb-3">Nuestros Valores</h5>
                             <ul class="text-muted">
@@ -287,15 +485,29 @@
     </section>
 
     <!-- Footer -->
+<<<<<<< HEAD
     <footer class="bg-dark text-white py-4 mt-5">
         <div class="container text-center">
             <p class="mb-0">&copy; 2026 Sistema de Innovación Curricular. Todos los derechos reservados.</p>
             <p class="small text-muted mt-2">Desarrollado con dedicación a la excelencia educativa</p>
+=======
+    <footer style="background:#1a237e;" class="text-white py-4 mt-2">
+        <div class="container text-center">
+            <div class="d-flex align-items-center justify-content-center gap-2 mb-2">
+                <div style="width:28px;height:28px;background:rgba(255,255,255,.2);border-radius:6px;display:flex;align-items:center;justify-content:center;">
+                    <i class="bi bi-mortarboard-fill" style="font-size:.8rem;"></i>
+                </div>
+                <span class="fw-bold">SIGCU</span>
+            </div>
+            <p class="mb-1" style="font-size:.82rem;">&copy; 2026 Sistema Integrado de Gestión del Conocimiento Universitario</p>
+            <small style="color:rgba(255,255,255,.5);font-size:.72rem;">Todos los derechos reservados</small>
+>>>>>>> SantiagoEcheverriDev
         </div>
     </footer>
 </div>
 
 <style>
+<<<<<<< HEAD
     .bg-gradient {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     }
@@ -317,4 +529,14 @@
         transform: translateY(-5px);
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
+=======
+    .hero {
+        min-height: 520px;
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #1a237e 0%, #1565c0 60%, #0288d1 100%);
+    }
+    .service-box { transition: transform .2s; }
+    .service-box:hover { transform: translateY(-4px); }
+>>>>>>> SantiagoEcheverriDev
 </style>

@@ -1,4 +1,10 @@
 @inherits LayoutComponentBase
+<<<<<<< HEAD
+=======
+@inject FrontBlazor_AppiGenericaCsharp.Services.AuthSessionService Sesion
+@inject NavigationManager Nav
+@implements IDisposable
+>>>>>>> SantiagoEcheverriDev
 
 <div class="page">
     <div class="sidebar">
@@ -6,8 +12,22 @@
     </div>
 
     <main>
+<<<<<<< HEAD
         <div class="top-row px-4">
             <span>Frontend Blazor — API GenericaCsharp</span>
+=======
+        <div class="top-row px-4 d-flex align-items-center justify-content-between">
+            <span class="text-muted" style="font-size:.82rem;">
+                <i class="bi bi-mortarboard-fill text-primary me-1"></i>
+                <strong>SIGCU</strong> — Sistema Integrado de Gestión del Conocimiento Universitario
+            </span>
+            @if (Sesion.EstaAutenticado)
+            {
+                <span class="text-muted" style="font-size:.78rem;">
+                    <i class="bi bi-person-circle me-1"></i>@Sesion.Username
+                </span>
+            }
+>>>>>>> SantiagoEcheverriDev
         </div>
 
         <article class="content px-4">
@@ -17,7 +37,20 @@
 </div>
 
 <div id="blazor-error-ui" data-nosnippet>
+<<<<<<< HEAD
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+=======
+    Ha ocurrido un error inesperado.
+    <a href="." class="reload">Recargar</a>
+    <span class="dismiss">✕</span>
+</div>
+
+@code {
+    protected override void OnInitialized() => Sesion.OnChange += OnSesionChanged;
+    private void OnSesionChanged() => InvokeAsync(StateHasChanged);
+    public void Dispose() => Sesion.OnChange -= OnSesionChanged;
+}
+>>>>>>> SantiagoEcheverriDev

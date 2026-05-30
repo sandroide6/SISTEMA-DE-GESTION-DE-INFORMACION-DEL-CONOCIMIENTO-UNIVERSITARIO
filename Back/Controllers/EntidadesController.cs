@@ -46,6 +46,10 @@ namespace ApiGenericaCsharp.Controllers
     /// </summary>
     [Route("api/{tabla}")]                                // Ruta dinámica: /api/usuarios, /api/productos, etc.
     [ApiController]                                       // Activa validación automática, binding, y comportamientos de API REST
+<<<<<<< HEAD
+=======
+[Authorize]
+>>>>>>> SantiagoEcheverriDev
     public class EntidadesController : ControllerBase
     {
         // Dependencias inyectadas - Aplicando DIP (Dependency Inversion Principle)
@@ -543,7 +547,10 @@ namespace ApiGenericaCsharp.Controllers
         /// Ruta: POST /api/{tabla}
         /// Ejemplo: POST /api/usuario con body JSON
         /// </summary>
+<<<<<<< HEAD
         [AllowAnonymous]
+=======
+>>>>>>> SantiagoEcheverriDev
         [HttpPost]
         public async Task<IActionResult> CrearAsync(
             string tabla,                                           // Del path: /api/{tabla}
@@ -678,7 +685,10 @@ namespace ApiGenericaCsharp.Controllers
         /// Ejemplo: PUT /api/usuario/email/juan@test.com con body JSON
         /// Con encriptación: PUT /api/usuario/email/juan@test.com?camposEncriptar=contrasena
         /// </summary>
+<<<<<<< HEAD
         [AllowAnonymous]
+=======
+>>>>>>> SantiagoEcheverriDev
         [HttpPut("{nombreClave}/{valorClave}")]
         public async Task<IActionResult> ActualizarAsync(
             string tabla,                                           // Del path: /api/{tabla}
@@ -829,7 +839,10 @@ namespace ApiGenericaCsharp.Controllers
         /// Ruta: DELETE /api/{tabla}/{nombreClave}/{valorClave}
         /// Ejemplo: DELETE /api/producto/codigo/PRD001
         /// </summary>
+<<<<<<< HEAD
         [AllowAnonymous]
+=======
+>>>>>>> SantiagoEcheverriDev
         [HttpDelete("{nombreClave}/{valorClave}")]
         public async Task<IActionResult> EliminarAsync(
             string tabla,                                          // Del path: /api/{tabla}

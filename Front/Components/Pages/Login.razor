@@ -22,6 +22,7 @@
 
         <form @onsubmit="IniciarSesion">
             <div class="mb-3">
+<<<<<<< HEAD
                 <label for="email" class="form-label">Correo Electrónico</label>
                 <input 
                     type="email" 
@@ -29,6 +30,15 @@
                     id="email" 
                     placeholder="tu@email.com"
                     @bind="email"
+=======
+                <label for="username" class="form-label">Usuario</label>
+                <input 
+                    type="text" 
+                    class="form-control form-control-lg" 
+                    id="username" 
+                    placeholder="usuario"
+                    @bind="username"
+>>>>>>> SantiagoEcheverriDev
                     required />
             </div>
 
@@ -70,8 +80,12 @@
         <div class="mt-4 pt-3 border-top">
             <p class="text-center text-muted small">Credenciales de Prueba:</p>
             <ul class="small text-muted list-unstyled">
+<<<<<<< HEAD
                 <li><strong>Admin:</strong> admin@abc.com / cualquier_contraseña</li>
                 <li><strong>Usuario:</strong> usuario@abc.com / cualquier_contraseña</li>
+=======
+                <li><strong>Admin:</strong> admin / admin123</li>
+>>>>>>> SantiagoEcheverriDev
             </ul>
         </div>
     </div>
@@ -121,15 +135,25 @@
 </style>
 
 @code {
+<<<<<<< HEAD
     private string email = "admin@abc.com";
     private string password = "";
     private bool recuerdame = false;
+=======
+    private string username = "";
+    private string password = "";
+    private bool recuerdame = true;
+>>>>>>> SantiagoEcheverriDev
     private bool cargando = false;
     private string mensaje = "";
 
     private async Task IniciarSesion()
     {
+<<<<<<< HEAD
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+=======
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+>>>>>>> SantiagoEcheverriDev
         {
             mensaje = "Por favor completa todos los campos";
             return;
@@ -137,6 +161,7 @@
 
         cargando = true;
 
+<<<<<<< HEAD
         // TODO: Integrar con la API para autenticación
         // Por ahora, simulamos un login simple
         await Task.Delay(1000);
@@ -155,6 +180,13 @@
         {
             mensaje = "El correo o contraseña son incorrectos";
         }
+=======
+        var resultado = await Api.LoginAsync(username, password);
+        if (resultado.exito)
+            Nav.NavigateTo("/", forceLoad: true);
+        else
+            mensaje = resultado.mensaje;
+>>>>>>> SantiagoEcheverriDev
 
         cargando = false;
     }
