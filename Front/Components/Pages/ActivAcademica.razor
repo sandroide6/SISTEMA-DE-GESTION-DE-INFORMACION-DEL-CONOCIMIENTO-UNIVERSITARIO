@@ -167,7 +167,7 @@
         await CargarRegistros();
     }
 
-    private async Task CargarRegistros() { cargando = true; registros = await Api.ListarAsync("activ_academicas", limite); cargando = false; }
+    private async Task CargarRegistros() { cargando = true; registros = await Api.ListarAsync("activ_academica", limite); cargando = false; }
 
     private void NuevoRegistro()
     {
@@ -212,14 +212,14 @@
             ["pais_espejo"] = string.IsNullOrEmpty(campoPaisEspejo) ? null : campoPaisEspejo,
             ["disenio"] = campoDisenio
         };
-        var r = editando ? await Api.ActualizarAsync("activ_academicas", "id", campoId.ToString(), datos) : await Api.CrearAsync("activ_academicas", datos);
+        var r = editando ? await Api.ActualizarAsync("activ_academica", "id", campoId.ToString(), datos) : await Api.CrearAsync("activ_academica", datos);
         exito = r.exito; mensaje = r.mensaje;
         if (exito) { mostrarFormulario = false; await CargarRegistros(); }
     }
 
     private async Task EliminarRegistro(Dictionary<string, object?> reg)
     {
-        var r = await Api.EliminarAsync("activ_academicas", "id", reg.GetValueOrDefault("id")?.ToString() ?? "");
+        var r = await Api.EliminarAsync("activ_academica", "id", reg.GetValueOrDefault("id")?.ToString() ?? "");
         exito = r.exito; mensaje = r.mensaje;
         if (exito) await CargarRegistros();
     }

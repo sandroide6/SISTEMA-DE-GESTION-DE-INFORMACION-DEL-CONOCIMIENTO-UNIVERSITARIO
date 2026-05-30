@@ -66,11 +66,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if (!Sesion.EsAdmin)
-        {
-            Nav.NavigateTo("/", true);
-            return;
-        }
+        if (!Sesion.EstaAutenticado) { Nav.NavigateTo("/login", true); return; }
+        if (!Sesion.EsAdmin) { Nav.NavigateTo("/dashboard/universidad", false); return; }
         await Cargar();
     }
 

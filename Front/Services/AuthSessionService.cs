@@ -2,6 +2,8 @@ namespace FrontBlazor_AppiGenericaCsharp.Services;
 
 public class AuthSessionService
 {
+    public event Action? OnChange;
+
     public bool EstaAutenticado => !string.IsNullOrWhiteSpace(Token);
     public string? Token { get; private set; }
     public string? Username { get; private set; }
@@ -18,9 +20,9 @@ public class AuthSessionService
         UserId = userId;
         Username = username;
         _roles.Clear();
-
         if (roles is not null)
             _roles.AddRange(roles.Where(r => !string.IsNullOrWhiteSpace(r)));
+        OnChange?.Invoke();
     }
 
     public void CerrarSesion()
@@ -29,5 +31,6 @@ public class AuthSessionService
         UserId = null;
         Username = null;
         _roles.Clear();
+        OnChange?.Invoke();
     }
 }
